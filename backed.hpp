@@ -11,8 +11,8 @@
 #include <string>
 #include <eosio/crypto.hpp>
 #include <eosio/transaction.hpp>
-#include "../tables/atomic.hpp"
-#include "../tables/atomicdata.hpp"
+#include "include/atomic.hpp"
+#include "include/atomicdata.hpp"
 #include<map>
 #include "structs.hpp"
 #include "constants.hpp"
