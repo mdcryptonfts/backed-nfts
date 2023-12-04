@@ -4,23 +4,29 @@
 #include "functions.cpp"
 #include "on_notify.cpp"
 
-ACTION backednfts::addauthacct(const name& account_to_add)
+ACTION backednfts::addauthaccts(const std::vector<eosio::name>& accounts_to_add)
 {
 	require_auth(get_self());
 
-	if(!is_account(account_to_add)){
-		check(false, "account_to_add does not exist");
-	}
-
 	auto it = config_t.require_find(0, ERR_CONFIG_NOT_FOUND);
 
-	if(std::find(it->authorized_accounts.begin(), it->authorized_accounts.end(), get_self()) != it->authorized_accounts.end()){
-		check(false, (account_to_add.to_string() + " is already an authorized account").c_str());
-	}	
+	std::vector<eosio::name> existingAccounts = it->authorized_accounts;
+
+	for(name a : accounts_to_add){
+		if(!is_account(a)){
+			check(false, (a.to_string() + " does not exist").c_str());
+		}
+
+		if(std::find(existingAccounts.begin(), existingAccounts.end(), a) != existingAccounts.end()){
+			check(false, (a.to_string() + " is already an authorized account").c_str());
+		}	
+
+		existingAccounts.push_back(a);
+	}
 
 	config_t.modify(it, get_self(), [&](auto &_config){
-		_config.authorized_accounts.push_back(account_to_add);
-	});
+		_config.authorized_accounts = existingAccounts;
+	});		
 
 }
 

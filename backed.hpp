@@ -28,7 +28,7 @@ CONTRACT backednfts : public contract {
 		backednfts(name receiver, name code, datastream<const char *> ds):contract(receiver, code, ds){}
 
 		//Main Actions
-		ACTION addauthacct(const name& account_to_add);
+		ACTION addauthaccts(const std::vector<eosio::name>& accounts_to_add);
 		ACTION addblacklist(const eosio::name& user, const std::vector<eosio::name>& wallets_to_blacklist);
 		ACTION initconfig(const eosio::name& filter_type);
 		ACTION removeburn(const eosio::name& user, const eosio::name& collection_name, const eosio::name& schema_name,
