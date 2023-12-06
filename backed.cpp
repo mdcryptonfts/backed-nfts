@@ -331,6 +331,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
+				_m.reward_schema = col_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});
 		} else {
@@ -338,6 +339,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
+				_m.reward_schema = col_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});			
 		}
@@ -357,6 +359,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
+				_m.reward_schema = col_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});
 		} else {
@@ -364,6 +367,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
+				_m.reward_schema = col_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});			
 		}
