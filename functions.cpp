@@ -87,8 +87,8 @@ bool backednfts::schema_exists(const name& collection_name, const name& schema_n
 
 bool backednfts::template_exists(const name& collection_name, const uint64_t& template_id){
 	atomicassets::templates_t temptbl(ATOMICASSETS_CONTRACT, collection_name.value);
-	auto collection_itr = temptbl.find(template_id);
-	if(collection_itr != temptbl.end()){
+	auto temp_itr = temptbl.find(template_id);
+	if(temp_itr != temptbl.end()){
 		return true;
 	}
 	return false;

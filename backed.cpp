@@ -247,6 +247,9 @@ ACTION backednfts::upsertburn(const eosio::name& user, const eosio::name& collec
 	else if(filter_type == 3){ //templates
 		atomic_temps temps_t = atomic_temps(ATOMICASSETS_CONTRACT, collection_name.value);
 		auto temp_it = temps_t.require_find(template_id, ("template " + to_string(template_id) + " doesn't exist in " + collection_name.to_string() + " collection").c_str());
+		if(temp_it->burnable != 1){
+			check(false, "this template is not burnable");
+		}
 
 		auto it = burn_t.find(template_id);
 
@@ -286,7 +289,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 	validate_quantity_to_mint(quantity_to_mint);
 
 	atomicassets::templates_t temptbl(ATOMICASSETS_CONTRACT, reward_collection.value);
-	auto col_it = temptbl.require_find(reward_template, ("template id " + to_string(reward_template) + " doesn't exist in " + reward_collection.to_string() + " collection").c_str());
+	auto reward_temp_it = temptbl.require_find(reward_template, ("template id " + to_string(reward_template) + " doesn't exist in " + reward_collection.to_string() + " collection").c_str());
 
 	if(filter_type == 1){ //collections
 		auto m_it = mint_t.find(burn_collection.value);
@@ -298,7 +301,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
-				_m.reward_schema = col_it->schema_name;
+				_m.reward_schema = reward_temp_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});
 		} else {
@@ -306,7 +309,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
-				_m.reward_schema = col_it->schema_name;
+				_m.reward_schema = reward_temp_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});			
 		}
@@ -331,7 +334,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
-				_m.reward_schema = col_it->schema_name;
+				_m.reward_schema = reward_temp_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});
 		} else {
@@ -339,15 +342,18 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
-				_m.reward_schema = col_it->schema_name;
+				_m.reward_schema = reward_temp_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});			
 		}
 	}
 
 	else if(filter_type == 3){ //templates
-		if(!template_exists(burn_collection, burn_template)){
-			check(false, ("template id " + to_string(burn_template) + " doesn't exist in " + burn_collection.to_string() + " collection").c_str());
+		atomicassets::templates_t temp_t(ATOMICASSETS_CONTRACT, burn_collection.value);
+		auto temp_it = temp_t.require_find(burn_template, ("template id " + to_string(burn_template) + " doesn't exist in " + burn_collection.to_string() + " collection").c_str());		
+
+		if(temp_it->burnable != 1){
+			check(false, "this template is not burnable");
 		}
 
 		auto m_it = mint_t.find(burn_template);
@@ -359,7 +365,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
-				_m.reward_schema = col_it->schema_name;
+				_m.reward_schema = reward_temp_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});
 		} else {
@@ -367,7 +373,7 @@ ACTION backednfts::upsertmint(const eosio::name& user, const eosio::name& burn_c
 				_m.burns_required = burns_required;
 				_m.reward_template = reward_template;
 				_m.reward_collection = reward_collection;
-				_m.reward_schema = col_it->schema_name;
+				_m.reward_schema = reward_temp_it->schema_name;
 				_m.quantity_to_mint = quantity_to_mint;
 			});			
 		}
